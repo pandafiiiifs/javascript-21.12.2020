@@ -1,55 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
+// 1. Создать функцию, генерирующую шахматную доску.При этом можно использовать любые
+// html - теги по своему желанию.Доска должна быть разлинована соответствующим образом, т.е.чередовать черные и белые ячейки.
+// Строки должны нумероваться числами от 1 до 8, столбцы – латинскими буквами A, B, C, D, E, F, G, H.
+// 2. Заполнить созданную таблицу буквами, отвечающими за шахматную фигуру, например
+// К – король, Ф – ферзь и т.п., причем все фигуры должны стоять на своих местах и быть соответственно черными и белыми. (optoinal with images)
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Chess board. Canvas API, JS/ES5</title>
-</head>
+function drawChess(){
+    let mainBlock = document.querySelector('.main-block');
+    let block;
+    let flag = true;
 
-<body>
+    let figure = {
+        0 : ['-263px -19px', '-484px -22px', '-372px -17px', '-150px -16px', '-40px -16px','-372px -17px', '-484px -22px','-263px -19px'],
+        1 : ['-595px -19px', '-595px -19px', '-595px -19px', '-595px -19px', '-595px -19px','-595px -19px', '-595px -19px','-595px -19px'],
+        6 : ['-595px -116px', '-595px -116px', '-595px -116px', '-595px -116px', '-595px -116px','-595px -116px', '-595px -116px','-595px -116px'],
+        7 : ['-263px -116px', '-484px -116px', '-372px -116px', '-150px -116px', '-40px -116px','-372px -116px', '-484px -116px','-263px -116px'],
+    };
 
-    <canvas id="renderCanvas" width="250" height="250" style="border: solid grey 2px"></canvas>
+    for (let i = 0; i<8; i++){
+        for (let j = 0; j<8; j++){
+            if (j==0) flag = !flag;
 
-    <script>
-        var canvas = document.getElementById("renderCanvas");
-        var ctx = canvas.getContext("2d");
-        var offset = 25;
+            block = document.createElement('div');
 
-        ctx.font = "20px Arial";
-        ctx.fillText("8", offset / 2 - 5, offset * 2 - 5);
-        ctx.fillText("7", offset / 2 - 5, offset * 3 - 5);
-        ctx.fillText("6", offset / 2 - 5, offset * 4 - 5);
-        // Letters
-        ctx.fillText("a", offset * 1 + 5, offset / 2 + 5);
-        ctx.fillText("b", offset * 2 + 5, offset / 2 + 5);
-        ctx.fillText("c", offset * 3 + 5, offset / 2 + 5);
+            if (flag) block.className = 'block black';
+            else block.className = 'block white';
 
-        drawCell(offset, offset, "black");
-        drawCell(offset * 2, offset, "rgb(220, 220, 220)");
-        drawCell(offset * 3, offset, "black");
-        drawCell(offset * 2, offset * 2, "black");
-        // Borders
-        drawLine(offset * 9, offset, offset * 9, offset * 9); // Right border
-        drawLine(offset, offset, offset, offset * 9); // Left border
-        drawLine(offset, offset, offset * 9, offset); // Top border
+            if (figure[i]!==undefined && figure[i][j]!==undefined){
+                block.style.backgroundImage = 'url(chess.png)';
+                block.style.backgroundPosition = figure[i][j];
+            }
 
-        function drawCell(x, y, color)
-        {
-            ctx.beginPath();
-            ctx.rect(x, y, 25, 25);
-            ctx.fillStyle = color;
-            ctx.fill();
+            mainBlock.appendChild(block);
+            flag = !flag;
         }
+    }
+}
 
-        function drawLine(x0, y0, x1, y1)
-        {
-            ctx.beginPath();
-            ctx.strokeStyle = "green";
-            ctx.moveTo(x0, y0);
-            ctx.lineTo(x1, y1);
-            ctx.stroke();
-        }
-    </script>
-</body>
+drawChess();
